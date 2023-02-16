@@ -71,9 +71,7 @@ export const createQuiz = async (req) => {
     });
 
     if (result) {
-      // get record
-      const quizData = getQuizByUUID(result.uuid);
-      return quizData;
+      return result;
     } else {
       return false;
     }

@@ -41,10 +41,12 @@ export const createQuiz = async (req, res) => {
     const save = await createQuizRepository(req);
 
     if (save) {
+      const data = await getQuizByUUIDRepository(save.uuid);
+
       await res.status(200).json({
         code: 200,
         success: true,
-        data: save,
+        data: data,
         errors: null,
       });
     } else {
