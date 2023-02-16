@@ -4,6 +4,7 @@ import Users from "../models/users.model.js";
 import Quiz from "../models/quiz.model.js";
 import Questions from "../models/questions.model.js";
 import AnswerOpt from "../models/answersOpt.model.js";
+import UserAnswers from "../models/userAnswers.model.js";
 
 if (process.env.NODE_ENV === "development") {
   // db.sync()
