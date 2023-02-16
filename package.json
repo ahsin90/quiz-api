@@ -1,0 +1,48 @@
+{
+  "name": "j2bf-cms-api",
+  "version": "1.0.0",
+  "description": "API of j2bf-cms-api",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "concurrently \"prettier --write .\" \"nodemon node app.js\"",
+    "test": "",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write .",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "migrate": "node migrations/runMigration.js",
+    "seed": "node seeder/seeder.js",
+    "app:init": "concurrently \"npm run migrate\" \"npm run seed\""
+  },
+  "author": "Muhammad Ahsin",
+  "license": "MIT",
+  "dependencies": {
+    "app-root-path": "^3.1.0",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "mysql2": "^2.3.3",
+    "node-sequelize-datatable": "^1.0.11",
+    "nodemon": "^2.0.20",
+    "sequelize": "^6.23.0",
+    "simple-body-validator": "^1.2.4",
+    "winston": "^3.8.2"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "concurrently": "^7.4.0",
+    "eslint": "^8.25.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.1.0",
+    "prettier": "^2.7.1",
+    "sequelize-cli": "^6.5.1"
+  }
+}
