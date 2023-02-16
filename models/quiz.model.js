@@ -23,11 +23,6 @@ const Quiz = db.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    isMandatory: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: 0,
-      allowNull: false,
-    },
     status: {
       type: DataTypes.ENUM("PUBLISH", "DRAFT"),
       defaultValue: "DRAFT",

@@ -20,6 +20,15 @@ const Questions = db.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    isMandatory: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0,
+      allowNull: false,
+    },
+    quizId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     order: {
       type: DataTypes.INTEGER,
       allowNull: true,
