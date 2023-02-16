@@ -5,6 +5,7 @@ import Quiz from "../models/quiz.model.js";
 import Questions from "../models/questions.model.js";
 import AnswerOpt from "../models/answersOpt.model.js";
 import { uuid } from "uuidv4";
+import { getPagination, getPagingData } from "../helpers/helpers.js";
 
 export const createQuiz = async (req) => {
   try {
@@ -160,3 +161,48 @@ function separateAnswer(questionId, rows) {
 
   return filtered;
 }
+
+export const quizList = async (req) => {
+  try {
+    const { page, size, search } = req.query;
+    const condition = search ? { name: { [Op.like]: `%${search}%` } } : null;
+    const { limit, offset } = getPagination(page, size);
+
+    const data = await Quiz.findAndCountAll({
+      where: condition,
+      limit,
+      offset,
+    });
+    const response = getPagingData(data, page, limit);
+    return response;
+  } catch (err) {
+    log.error(err);
+  }
+};
+
+export const updateQuiz = async (req) => {
+  try {
+    const uuid = req.params.uuid;
+
+    const quiz = await Quiz.findOne({
+      where: { uuid: uuid },
+      raw: true,
+    });
+
+    if (quiz) {
+      const update = await Quiz.update(req.body, {
+        where: { id: quiz.id },
+      });
+
+      if (update[0] === 1) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch (err) {
+    log.error(err);
+  }
+};
