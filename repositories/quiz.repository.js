@@ -71,7 +71,9 @@ export const createQuiz = async (req) => {
     });
 
     if (result) {
-      return result;
+      // get record
+      const quizData = getQuizByUUID(result.uuid);
+      return quizData;
     } else {
       return false;
     }
@@ -90,4 +92,73 @@ function getQuestionId(uuid, questionsData = []) {
     }
   }
   return id;
+}
+
+export const getQuizByUUID = async (uuid) => {
+  try {
+    const quiz = await Quiz.findOne({
+      where: { uuid: uuid },
+      raw: true,
+    });
+
+    if (quiz) {
+      // query the questions
+      const [questions] = await db.query(
+        "SELECT q.*, ao.id as answerId, ao.name as answerName, ao.isRight FROM questions q LEFT JOIN answersOpt ao ON q.id=ao.questionId WHERE q.quizId = " +
+          quiz.id
+      );
+
+      quiz.questions = separateQuestions(questions);
+    }
+
+    return quiz;
+  } catch (err) {
+    log.error(err);
+  }
+};
+
+function separateQuestions(rows) {
+  let questions = [];
+
+  if (rows.length > 0) {
+    for (let index in rows) {
+      questions[rows[index].id] = {
+        id: rows[index].id,
+        uuid: rows[index].uuid,
+        title: rows[index].title,
+        isMandatory: rows[index].isMandatory,
+        createdAt: rows[index].createdAt,
+        updatedAt: rows[index].updatedAt,
+        answers: separateAnswer(rows[index].id, rows),
+      };
+    }
+  }
+  // remove null
+  const filtered = questions.filter(function (el) {
+    return el != null;
+  });
+
+  return filtered;
+}
+
+function separateAnswer(questionId, rows) {
+  let answers = [];
+
+  if (rows.length > 0) {
+    for (let index in rows) {
+      if (rows[index].id === questionId) {
+        answers[index] = {
+          id: rows[index].answerId,
+          name: rows[index].answerName,
+          isRight: rows[index].isRight,
+        };
+      }
+    }
+  }
+
+  const filtered = answers.filter(function (el) {
+    return el != null;
+  });
+
+  return filtered;
 }

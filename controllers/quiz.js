@@ -3,7 +3,10 @@ import { make } from "simple-body-validator";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import { createQuiz as createQuizRepository } from "../repositories/quiz.repository.js";
+import {
+  createQuiz as createQuizRepository,
+  getQuizByUUID as getQuizByUUIDRepository,
+} from "../repositories/quiz.repository.js";
 
 export const createQuiz = async (req, res) => {
   try {
@@ -45,13 +48,41 @@ export const createQuiz = async (req, res) => {
         errors: null,
       });
     } else {
-      throw "Failed to save data";
+      throw ["Failed to save data"];
     }
   } catch (err) {
     log.error(err);
     res.status(417).json({
-      status: false,
-      message: "Something went wrong!",
+      code: 417,
+      success: false,
+      data: null,
+      errors: err,
+    });
+  }
+};
+
+export const getQuizByUUID = async (req, res) => {
+  try {
+    const uuid = req.params.uuid;
+    const result = await getQuizByUUIDRepository(uuid);
+
+    if (result) {
+      await res.status(200).json({
+        code: 200,
+        success: true,
+        data: result,
+        errors: null,
+      });
+    } else {
+      throw ["No record found"];
+    }
+  } catch (err) {
+    log.error(err);
+    res.status(417).json({
+      code: 417,
+      success: false,
+      data: null,
+      errors: err,
     });
   }
 };
