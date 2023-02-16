@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 ARG app_version="1.0"
 ENV APP_VERSION=$app_version
 
-ENV PORT=80
+ENV PORT=5000
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -20,7 +20,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-EXPOSE 80
+EXPOSE 5000
 
 
 CMD [ "node", "app.js" ]
